@@ -49,7 +49,17 @@ class ViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
         
         let search = MKLocalSearch(request: request)
         search.start { (response, error) in
-            if let response = response {
+            if let error = error {
+                let alertController = UIAlertController(title: "Ошибка", message:"Возникла ошибка, попробуйте еще раз", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+                print(error)
+                return
+            }
+
+
+
+            if let response = response, !response.mapItems.isEmpty {
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 
                 for item in response.mapItems {
